@@ -120,8 +120,8 @@ class PTBModel(object):
 
     def calcLoss(targetss,logitss,batch_sizee,num_sampless,num_stepss):
       top_k_logitss,top_k_indices=tf.nn.top_k(logitss,num_sampless);
-      top_k_logitss=tf.stop_gradient(top_k_logitss);
-      top_k_indices=tf.stop_gradient(top_k_indices);
+      #top_k_logitss=tf.stop_gradient(top_k_logitss);
+      #top_k_indices=tf.stop_gradient(top_k_indices);
       print("logitss");
       print(logitss);
       print("top_k_logitss");
