@@ -118,24 +118,53 @@ class PTBModel(object):
 #          size, forget_bias=0.0, state_is_tuple=True)
     
 
-    def calcLoss(targetss,logitss,batch_sizee,num_sampless,num_stepss):
-      top_k_logitss,top_k_indices=tf.nn.top_k(logitss,num_sampless);
-      top_k_logitss=tf.stop_gradient(top_k_logitss);
+    def get_random_indices(logitss,num_sampless):
+      return tf.random_uniform([logitss.get_shape().as_list()[0],num_sampless],
+        minval=0, maxval=logitss.get_shape().as_list()[1]-1, dtype=tf.int32, seed=0);
+
+    def get_top_k_indices(logitss,k):
+      top_k_logitss,top_k_indices=tf.nn.top_k(logitss,k);
+      #top_k_logitss=tf.stop_gradient(top_k_logitss);
       top_k_indices=tf.stop_gradient(top_k_indices);
+      return top_k_indices;
+
+    def calcLoss(targetss,logitss,batch_sizee,num_sampless,num_stepss,indices):
+      indices2=tf.zeros([num_sampless],tf.int32);
+      print("indices2");
+      print(indices2);
+
+      #heightt=tf.to_int32(tf.shape(logitss)[0]);
+      heightt=logitss.get_shape().as_list()[0];
+      print("heightt");
+      print(heightt);
+      for i in range(1,heightt):
+        #print("Loop Beginsssss");
+        tempp=tf.fill([num_sampless],i);
+        indices2=tf.concat_v2([indices2,tempp],0);
+
+      print("indices2");
+      print(indices2);
+      indices=indices2+tf.reshape(indices, [-1]);
+      print("indices");
+      print(indices);
+      negative_logitss=tf.gather(tf.reshape(logitss, [-1]),indices);
+      negative_logitss=tf.reshape(negative_logitss,[heightt,num_sampless]);
+      
       print("logitss");
       print(logitss);
-      print("top_k_logitss");
-      print(top_k_logitss);
-      print("top_k_indices");
-      print(top_k_indices);
+      print("negative_logitss");
+      print(negative_logitss);
+      print("indices");
+      print(indices);
       print("targetss");
       print(targetss);
-      #true_logitss=tf.gather(logitss,targetss);
       targetss_flattened=tf.range(0,tf.shape(logitss)[0])*tf.shape(logitss)[1]+targetss;
+      print("targetss_flattened");
+      print(targetss_flattened);
       true_logitss = tf.gather(tf.reshape(logitss, [-1]),targetss_flattened);
       print("true_logitss");
       print(true_logitss);
-      new_targetss=tf.zeros([batch_sizee*num_stepss],tf.int32);
+      new_targetss=tf.zeros([logitss.get_shape().as_list()[0]],tf.int32);
       print("new_targetss");
       print(new_targetss);
       true_logitss_2d=tf.reshape(true_logitss,[tf.shape(true_logitss)[0],1]);
@@ -143,7 +172,7 @@ class PTBModel(object):
       print(true_logitss_2d);
 
       print("new_logitss");
-      new_logitss=tf.concat_v2([true_logitss_2d,top_k_logitss],1);
+      new_logitss=tf.concat_v2([true_logitss_2d,negative_logitss],1);
       print(new_logitss);
       
       
@@ -209,7 +238,10 @@ class PTBModel(object):
     softmax_b = tf.get_variable("softmax_b", [vocab_size], dtype=data_type())
 
     use_sample_softmax=False;
-    use_max_sample_softmax=True;
+
+    use_top_k_sample_softmax=False;
+    use_random_sample_softmax=True;
+
     num_samples = 100;
 
     if is_training:
@@ -227,7 +259,7 @@ class PTBModel(object):
 
         print('Cost');
         print(cost);
-      elif use_max_sample_softmax:
+      elif use_top_k_sample_softmax:
         logits = tf.matmul(output, softmax_w) + softmax_b
         '''
         loss = tf.contrib.legacy_seq2seq.sequence_loss_by_example(
@@ -242,7 +274,37 @@ class PTBModel(object):
         print("batch_size");
         print(batch_size);
 
-        loss=calcLoss(targetss,logits,batch_size,num_samples,num_steps);
+        indices=get_top_k_indices(logits,num_samples);
+        loss=calcLoss(targetss,logits,batch_size,num_samples,num_steps,indices);
+        '''
+        loss = tf.nn.seq2seq.sequence_loss_by_example(
+            [logits],
+            [tf.reshape(input_.targets, [-1])],
+            [tf.ones([batch_size * num_steps], dtype=data_type())])
+        '''
+        print("[tf.reshape(input_.targets, [-1])]");
+        print([tf.reshape(input_.targets, [-1])]);
+        print("loss");
+        print(loss);
+        self._cost = cost = tf.reduce_sum(loss) / batch_size
+        self._final_state = state
+      elif use_random_sample_softmax:
+        logits = tf.matmul(output, softmax_w) + softmax_b
+        '''
+        loss = tf.contrib.legacy_seq2seq.sequence_loss_by_example(
+            [logits],
+            [tf.reshape(input_.targets, [-1])],
+            [tf.ones([batch_size * num_steps], dtype=data_type())])
+        '''
+        probabilities=(tf.nn.softmax(logits));
+        print("probabilities[0]");
+        print(probabilities[0]);
+        targetss=tf.reshape(input_.targets, [-1]);
+        print("batch_size");
+        print(batch_size);
+
+        indices=get_random_indices(logits,num_samples);
+        loss=calcLoss(targetss,logits,batch_size,num_samples,num_steps,indices);
         '''
         loss = tf.nn.seq2seq.sequence_loss_by_example(
             [logits],

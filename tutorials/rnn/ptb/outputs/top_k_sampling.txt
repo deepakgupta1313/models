@@ -1,0 +1,488 @@
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcublas.so locally
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcudnn.so locally
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcufft.so locally
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcuda.so.1 locally
+I tensorflow/stream_executor/dso_loader.cc:128] successfully opened CUDA library libcurand.so locally
+WARNING:tensorflow:From ptb_word_lm.py:529 in main.: scalar_summary (from tensorflow.python.ops.logging_ops) is deprecated and will be removed after 2016-11-30.
+Instructions for updating:
+Please switch to tf.summary.scalar. Note that tf.summary.scalar uses the node name instead of the tag. This means that TensorFlow will automatically de-duplicate summary names based on the scope they are created in. Also, passing a tensor or list of tags to a scalar summary op is no longer supported.
+WARNING:tensorflow:From ptb_word_lm.py:530 in main.: scalar_summary (from tensorflow.python.ops.logging_ops) is deprecated and will be removed after 2016-11-30.
+Instructions for updating:
+Please switch to tf.summary.scalar. Note that tf.summary.scalar uses the node name instead of the tag. This means that TensorFlow will automatically de-duplicate summary names based on the scope they are created in. Also, passing a tensor or list of tags to a scalar summary op is no longer supported.
+WARNING:tensorflow:From ptb_word_lm.py:536 in main.: scalar_summary (from tensorflow.python.ops.logging_ops) is deprecated and will be removed after 2016-11-30.
+Instructions for updating:
+Please switch to tf.summary.scalar. Note that tf.summary.scalar uses the node name instead of the tag. This means that TensorFlow will automatically de-duplicate summary names based on the scope they are created in. Also, passing a tensor or list of tags to a scalar summary op is no longer supported.
+E tensorflow/stream_executor/cuda/cuda_driver.cc:509] failed call to cuInit: CUDA_ERROR_UNKNOWN
+I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:158] retrieving CUDA diagnostic information for host: Mintoo-GT72VR-6RE
+I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:165] hostname: Mintoo-GT72VR-6RE
+I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:189] libcuda reported version is: 367.57.0
+I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:363] driver version file contents: """NVRM version: NVIDIA UNIX x86_64 Kernel Module  367.57  Mon Oct  3 20:37:01 PDT 2016
+GCC version:  gcc version 5.4.0 20160609 (Ubuntu 5.4.0-6ubuntu1~16.04.4) 
+"""
+I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:193] kernel reported version is: 367.57.0
+I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:300] kernel version seems to match DSO: 367.57.0
+WARNING:tensorflow:Standard services need a 'logdir' passed to the SessionManager
+probabilities[0]
+Tensor("Train/Model/strided_slice:0", shape=(10000,), dtype=float32)
+batch_size
+20
+indices2
+Tensor("Train/Model/zeros_4:0", shape=(100,), dtype=int32)
+heightt
+400
+indices2
+Tensor("Train/Model/concat_v2_399:0", shape=(40000,), dtype=int32)
+indices
+Tensor("Train/Model/add_1:0", shape=(40000,), dtype=int32)
+logitss
+Tensor("Train/Model/add:0", shape=(400, 10000), dtype=float32)
+negative_logitss
+Tensor("Train/Model/Reshape_4:0", shape=(400, 100), dtype=float32)
+indices
+Tensor("Train/Model/add_1:0", shape=(40000,), dtype=int32)
+targetss
+Tensor("Train/Model/Reshape_1:0", shape=(400,), dtype=int32)
+targetss_flattened
+Tensor("Train/Model/add_2:0", shape=(400,), dtype=int32)
+true_logitss
+Tensor("Train/Model/Gather_1:0", shape=(400,), dtype=float32)
+new_targetss
+Tensor("Train/Model/zeros_5:0", shape=(400,), dtype=int32)
+true_logitss_2d
+Tensor("Train/Model/Reshape_6:0", shape=(400, 1), dtype=float32)
+new_logitss
+Tensor("Train/Model/concat_v2_400:0", shape=(400, 101), dtype=float32)
+[tf.reshape(input_.targets, [-1])]
+[<tf.Tensor 'Train/Model/Reshape_7:0' shape=(400,) dtype=int32>]
+loss
+Tensor("Train/Model/sequence_loss_by_example/truediv:0", shape=(400,), dtype=float32)
+Epoch: 1 Learning rate: 0.000100
+1016.85355377
+220
+0.004 perplexity: 101.703 speed: 2505 wps
+22451.9195099
+4860
+0.104 perplexity: 101.467 speed: 2938 wps
+43851.5741577
+9500
+0.204 perplexity: 101.084 speed: 2915 wps
+65223.1566772
+14140
+0.304 perplexity: 100.753 speed: 2932 wps
+86564.285881
+18780
+0.404 perplexity: 100.423 speed: 2893 wps
+107871.246704
+23420
+0.504 perplexity: 100.078 speed: 2879 wps
+129148.12101
+28060
+0.604 perplexity: 99.740 speed: 2877 wps
+150390.78373
+32700
+0.703 perplexity: 99.395 speed: 2875 wps
+171606.111092
+37340
+0.803 perplexity: 99.065 speed: 2883 wps
+192786.942833
+41980
+0.903 perplexity: 98.726 speed: 2886 wps
+Epoch: 1 Train Perplexity: 98.393
+Epoch: 1 Valid Perplexity: 9401.134
+Epoch: 2 Learning rate: 0.000100
+1001.92170715
+220
+0.004 perplexity: 95.030 speed: 2826 wps
+22119.0060654
+4860
+0.104 perplexity: 94.749 speed: 2884 wps
+43197.3047104
+9500
+0.204 perplexity: 94.357 speed: 2896 wps
+64246.8617096
+14140
+0.304 perplexity: 94.031 speed: 2902 wps
+85265.1133881
+18780
+0.404 perplexity: 93.710 speed: 2891 wps
+106248.696014
+23420
+0.504 perplexity: 93.379 speed: 2898 wps
+127192.084206
+28060
+0.604 perplexity: 93.024 speed: 2890 wps
+148099.987259
+32700
+0.703 perplexity: 92.671 speed: 2907 wps
+168982.15696
+37340
+0.803 perplexity: 92.342 speed: 2928 wps
+189820.128502
+41980
+0.903 perplexity: 91.990 speed: 2943 wps
+Epoch: 2 Train Perplexity: 91.633
+Epoch: 2 Valid Perplexity: 8699.937
+Epoch: 3 Learning rate: 0.000100
+985.496620178
+220
+0.004 perplexity: 88.193 speed: 2947 wps
+21749.9368668
+4860
+0.104 perplexity: 87.821 speed: 3053 wps
+42465.3366089
+9500
+0.204 perplexity: 87.360 speed: 3073 wps
+63144.0995407
+14140
+0.304 perplexity: 86.976 speed: 3031 wps
+83782.5615921
+18780
+0.404 perplexity: 86.597 speed: 3041 wps
+104376.87075
+23420
+0.504 perplexity: 86.206 speed: 3030 wps
+124908.388199
+28060
+0.604 perplexity: 85.753 speed: 3020 wps
+145391.678146
+32700
+0.703 perplexity: 85.305 speed: 3009 wps
+165839.162788
+37340
+0.803 perplexity: 84.888 speed: 3004 wps
+186215.424583
+41980
+0.903 perplexity: 84.421 speed: 3008 wps
+Epoch: 3 Train Perplexity: 83.932
+Epoch: 3 Valid Perplexity: 7791.887
+Epoch: 4 Learning rate: 0.000100
+962.288162231
+220
+0.004 perplexity: 79.363 speed: 3107 wps
+21214.8083572
+4860
+0.104 perplexity: 78.664 speed: 3055 wps
+41380.169632
+9500
+0.204 perplexity: 77.930 speed: 3015 wps
+61468.562027
+14140
+0.304 perplexity: 77.257 speed: 2984 wps
+81467.8212128
+18780
+0.404 perplexity: 76.555 speed: 2979 wps
+101365.319771
+23420
+0.504 perplexity: 75.804 speed: 2961 wps
+121108.153412
+28060
+0.604 perplexity: 74.892 speed: 2983 wps
+140721.501274
+32700
+0.703 perplexity: 73.952 speed: 3005 wps
+160221.491997
+37340
+0.803 perplexity: 73.031 speed: 3009 wps
+179532.444183
+41980
+0.903 perplexity: 71.997 speed: 3013 wps
+Epoch: 4 Train Perplexity: 70.915
+Epoch: 4 Valid Perplexity: 5890.295
+Epoch: 5 Learning rate: 0.000050
+905.504310608
+220
+0.004 perplexity: 61.309 speed: 3143 wps
+19919.6298752
+4860
+0.104 perplexity: 60.261 speed: 3046 wps
+38814.8606491
+9500
+0.204 perplexity: 59.488 speed: 3056 wps
+57616.340126
+14140
+0.304 perplexity: 58.833 speed: 3068 wps
+76320.4877853
+18780
+0.404 perplexity: 58.202 speed: 2994 wps
+94927.9781036
+23420
+0.504 perplexity: 57.586 speed: 2919 wps
+113360.153687
+28060
+0.604 perplexity: 56.822 speed: 2814 wps
+131695.686661
+32700
+0.703 perplexity: 56.114 speed: 2843 wps
+149976.25322
+37340
+0.803 perplexity: 55.507 speed: 2867 wps
+168099.657265
+41980
+0.903 perplexity: 54.832 speed: 2878 wps
+Epoch: 5 Train Perplexity: 54.148
+Epoch: 5 Valid Perplexity: 4490.355
+Epoch: 6 Learning rate: 0.000025
+855.656585693
+220
+0.004 perplexity: 48.879 speed: 3068 wps
+18807.6095657
+4860
+0.104 perplexity: 47.937 speed: 3040 wps
+36675.8582916
+9500
+0.204 perplexity: 47.495 speed: 3065 wps
+54494.0914078
+14140
+0.304 perplexity: 47.177 speed: 3001 wps
+72266.9110641
+18780
+0.404 perplexity: 46.903 speed: 3003 wps
+90001.1471024
+23420
+0.504 perplexity: 46.661 speed: 3020 wps
+107594.42662
+28060
+0.604 perplexity: 46.268 speed: 3035 wps
+125158.433609
+32700
+0.703 perplexity: 45.946 speed: 3040 wps
+142739.789757
+37340
+0.803 perplexity: 45.728 speed: 3045 wps
+160211.37368
+41980
+0.903 perplexity: 45.439 speed: 3039 wps
+Epoch: 6 Train Perplexity: 45.126
+Epoch: 6 Valid Perplexity: 3821.220
+Epoch: 7 Learning rate: 0.000012
+829.951622009
+220
+0.004 perplexity: 43.489 speed: 2980 wps
+18241.3061981
+4860
+0.104 perplexity: 42.664 speed: 3030 wps
+35601.2075272
+9500
+0.204 perplexity: 42.415 speed: 3090 wps
+52938.8923645
+14140
+0.304 perplexity: 42.263 speed: 3069 wps
+70263.9201889
+18780
+0.404 perplexity: 42.158 speed: 3083 wps
+87584.0090485
+23420
+0.504 perplexity: 42.086 speed: 3079 wps
+104779.854416
+28060
+0.604 perplexity: 41.852 speed: 3073 wps
+121979.61734
+32700
+0.703 perplexity: 41.690 speed: 3074 wps
+139229.924095
+37340
+0.803 perplexity: 41.625 speed: 3091 wps
+156394.201828
+41980
+0.903 perplexity: 41.490 speed: 3103 wps
+Epoch: 7 Train Perplexity: 41.324
+Epoch: 7 Valid Perplexity: 3519.392
+Epoch: 8 Learning rate: 0.000006
+817.827720642
+220
+0.004 perplexity: 41.157 speed: 3214 wps
+17974.6064072
+4860
+0.104 perplexity: 40.386 speed: 3155 wps
+35096.0904236
+9500
+0.204 perplexity: 40.218 speed: 3177 wps
+52206.9412003
+14140
+0.304 perplexity: 40.131 speed: 3187 wps
+69320.665741
+18780
+0.404 perplexity: 40.093 speed: 3193 wps
+86445.7011642
+23420
+0.504 perplexity: 40.089 speed: 3197 wps
+103454.628006
+28060
+0.604 perplexity: 39.921 speed: 3194 wps
+120484.090866
+32700
+0.703 perplexity: 39.826 speed: 3196 wps
+137579.591385
+37340
+0.803 perplexity: 39.826 speed: 3198 wps
+154600.197823
+41980
+0.903 perplexity: 39.754 speed: 3200 wps
+Epoch: 8 Train Perplexity: 39.649
+Epoch: 8 Valid Perplexity: 3379.081
+Epoch: 9 Learning rate: 0.000003
+812.127372742
+220
+0.004 perplexity: 40.104 speed: 3222 wps
+17848.8195724
+4860
+0.104 perplexity: 39.354 speed: 3148 wps
+34857.9227295
+9500
+0.204 perplexity: 39.223 speed: 3107 wps
+51861.2506256
+14140
+0.304 perplexity: 39.162 speed: 3088 wps
+68874.4773331
+18780
+0.404 perplexity: 39.151 speed: 3084 wps
+85906.2588806
+23420
+0.504 perplexity: 39.176 speed: 3083 wps
+102825.371849
+28060
+0.604 perplexity: 39.036 speed: 3065 wps
+119772.752861
+32700
+0.703 perplexity: 38.969 speed: 3067 wps
+136793.275627
+37340
+0.803 perplexity: 38.996 speed: 3073 wps
+153744.09285
+41980
+0.903 perplexity: 38.952 speed: 3072 wps
+Epoch: 9 Train Perplexity: 38.873
+Epoch: 9 Valid Perplexity: 3311.839
+Epoch: 10 Learning rate: 0.000002
+809.351448059
+220
+0.004 perplexity: 39.602 speed: 3191 wps
+17787.5716858
+4860
+0.104 perplexity: 38.861 speed: 3111 wps
+34742.0617828
+9500
+0.204 perplexity: 38.747 speed: 3183 wps
+51693.0258865
+14140
+0.304 perplexity: 38.699 speed: 3183 wps
+68657.2183838
+18780
+0.404 perplexity: 38.701 speed: 3156 wps
+85643.5498276
+23420
+0.504 perplexity: 38.739 speed: 3134 wps
+102518.808121
+28060
+0.604 perplexity: 38.612 speed: 3134 wps
+119426.077545
+32700
+0.703 perplexity: 38.558 speed: 3145 wps
+136409.960815
+37340
+0.803 perplexity: 38.597 speed: 3151 wps
+153326.592018
+41980
+0.903 perplexity: 38.566 speed: 3134 wps
+Epoch: 10 Train Perplexity: 38.500
+Epoch: 10 Valid Perplexity: 3279.008
+Epoch: 11 Learning rate: 0.000001
+807.993011475
+220
+0.004 perplexity: 39.358 speed: 3288 wps
+17757.4879761
+4860
+0.104 perplexity: 38.621 speed: 3303 wps
+34685.1766434
+9500
+0.204 perplexity: 38.516 speed: 3283 wps
+51610.3958664
+14140
+0.304 perplexity: 38.473 speed: 3225 wps
+68550.4775162
+18780
+0.404 perplexity: 38.482 speed: 3210 wps
+85514.4422531
+23420
+0.504 perplexity: 38.526 speed: 3141 wps
+102368.129883
+28060
+0.604 perplexity: 38.405 speed: 3094 wps
+119255.637856
+32700
+0.703 perplexity: 38.358 speed: 3051 wps
+136221.46125
+37340
+0.803 perplexity: 38.403 speed: 3040 wps
+153121.206642
+41980
+0.903 perplexity: 38.378 speed: 3014 wps
+Epoch: 11 Train Perplexity: 38.318
+Epoch: 11 Valid Perplexity: 3262.823
+Epoch: 12 Learning rate: 0.000000
+807.324028015
+220
+0.004 perplexity: 39.238 speed: 3074 wps
+17742.6412277
+4860
+0.104 perplexity: 38.504 speed: 2951 wps
+34657.0718842
+9500
+0.204 perplexity: 38.402 speed: 3084 wps
+51569.5684052
+14140
+0.304 perplexity: 38.362 speed: 3059 wps
+68497.766571
+18780
+0.404 perplexity: 38.374 speed: 2994 wps
+85450.7324829
+23420
+0.504 perplexity: 38.422 speed: 2945 wps
+102293.799538
+28060
+0.604 perplexity: 38.303 speed: 2899 wps
+119171.600311
+32700
+0.703 perplexity: 38.259 speed: 2877 wps
+136128.55983
+37340
+0.803 perplexity: 38.308 speed: 2888 wps
+153020.046143
+41980
+0.903 perplexity: 38.285 speed: 2868 wps
+Epoch: 12 Train Perplexity: 38.229
+Epoch: 12 Valid Perplexity: 3254.899
+Epoch: 13 Learning rate: 0.000000
+806.992935181
+220
+0.004 perplexity: 39.179 speed: 2651 wps
+17735.3665161
+4860
+0.104 perplexity: 38.446 speed: 2775 wps
+34643.3527985
+9500
+0.204 perplexity: 38.347 speed: 2800 wps
+51549.6574478
+14140
+0.304 perplexity: 38.308 speed: 2780 wps
+68472.1267853
+18780
+0.404 perplexity: 38.322 speed: 2792 wps
+85419.8230743
+23420
+0.504 perplexity: 38.371 speed: 2830 wps
+102257.818825
+28060
+0.604 perplexity: 38.254 speed: 2851 wps
+119131.010857
+32700
+0.703 perplexity: 38.212 speed: 2859 wps
+136083.80265
+37340
+0.803 perplexity: 38.262 speed: 2859 wps
+152971.449837
+41980
+0.903 perplexity: 38.241 speed: 2873 wps
+Epoch: 13 Train Perplexity: 38.186
+Epoch: 13 Valid Perplexity: 3251.321
+Test Perplexity: 3133.977
