@@ -64,6 +64,9 @@ import tensorflow as tf
 
 import reader
 
+#train_opt = open("train_opt", 'w');
+#valid_opt = open("valid_opt", 'w');
+
 flags = tf.flags
 logging = tf.logging
 
@@ -239,27 +242,39 @@ class PTBModel(object):
 
     use_sample_softmax=False;
 
-    use_top_k_sample_softmax=False;
-    use_random_sample_softmax=True;
+    use_top_k_sample_softmax=True;
+    use_random_sample_softmax=False;
 
-    num_samples = 100;
+    num_samples = 10;
+    
 
     if is_training:
       if use_sample_softmax == True:
-        w = tf.get_variable("proj_w", [size, vocab_size])
-        w_t = tf.transpose(w)
-        b = tf.get_variable("proj_b", [vocab_size])
-        output_projection = (w, b)
-        loss = tf.nn.sampled_softmax_loss(w_t, b, output, 
+        print("use_sample_softmax");
+#        w = tf.get_variable("proj_w", [size, vocab_size])
+#        w_t = tf.transpose(w)
+#        b = tf.get_variable("proj_b", [vocab_size])
+        output_projection = (softmax_w, softmax_b)
+        loss = tf.nn.sampled_softmax_loss(softmax_w_t, softmax_b, output, 
           tf.reshape(input_.targets, [-1, 1]), num_samples, vocab_size)
+
+        logits = tf.matmul(output, softmax_w) + softmax_b;
+        loss_full = tf.nn.seq2seq.sequence_loss_by_example(
+            [logits],
+            [tf.reshape(input_.targets, [-1])],
+            [tf.ones([batch_size * num_steps], dtype=data_type())])
+        self._cost_full = tf.reduce_sum(loss_full) / batch_size;
+
         self._cost = cost = tf.reduce_sum(loss) / batch_size;
         self._final_state = state
+
         print('Loss');
         print(loss);
 
         print('Cost');
         print(cost);
       elif use_top_k_sample_softmax:
+        print("use_top_k_sample_softmax");
         logits = tf.matmul(output, softmax_w) + softmax_b
         '''
         loss = tf.contrib.legacy_seq2seq.sequence_loss_by_example(
@@ -276,12 +291,13 @@ class PTBModel(object):
 
         indices=get_top_k_indices(logits,num_samples);
         loss=calcLoss(targetss,logits,batch_size,num_samples,num_steps,indices);
-        '''
-        loss = tf.nn.seq2seq.sequence_loss_by_example(
+        
+        loss_full = tf.nn.seq2seq.sequence_loss_by_example(
             [logits],
             [tf.reshape(input_.targets, [-1])],
             [tf.ones([batch_size * num_steps], dtype=data_type())])
-        '''
+        self._cost_full = tf.reduce_sum(loss_full) / batch_size;
+        
         print("[tf.reshape(input_.targets, [-1])]");
         print([tf.reshape(input_.targets, [-1])]);
         print("loss");
@@ -289,6 +305,7 @@ class PTBModel(object):
         self._cost = cost = tf.reduce_sum(loss) / batch_size
         self._final_state = state
       elif use_random_sample_softmax:
+        print("use_random_sample_softmax")
         logits = tf.matmul(output, softmax_w) + softmax_b
         '''
         loss = tf.contrib.legacy_seq2seq.sequence_loss_by_example(
@@ -305,12 +322,15 @@ class PTBModel(object):
 
         indices=get_random_indices(logits,num_samples);
         loss=calcLoss(targetss,logits,batch_size,num_samples,num_steps,indices);
-        '''
-        loss = tf.nn.seq2seq.sequence_loss_by_example(
+        
+
+        loss_full = tf.nn.seq2seq.sequence_loss_by_example(
             [logits],
             [tf.reshape(input_.targets, [-1])],
             [tf.ones([batch_size * num_steps], dtype=data_type())])
-        '''
+        self._cost_full = tf.reduce_sum(loss_full) / batch_size;
+
+
         print("[tf.reshape(input_.targets, [-1])]");
         print([tf.reshape(input_.targets, [-1])]);
         print("loss");
@@ -318,6 +338,7 @@ class PTBModel(object):
         self._cost = cost = tf.reduce_sum(loss) / batch_size
         self._final_state = state
       else:
+        print("No Sampling Training")
         logits = tf.matmul(output, softmax_w) + softmax_b
         #print([batch_size]);
         #print([num_steps]);
@@ -330,7 +351,9 @@ class PTBModel(object):
               [tf.ones([batch_size * num_steps], dtype=data_type())])
         self._cost = cost = tf.reduce_sum(loss) / batch_size
         self._final_state = state
+        self._cost_full = tf.reduce_sum(loss) / batch_size;
     else:
+      print("No Sampling Testing")
       logits = tf.matmul(output, softmax_w) + softmax_b
       #print([batch_size]);
       #print([num_steps]);
@@ -343,6 +366,7 @@ class PTBModel(object):
             [tf.ones([batch_size * num_steps], dtype=data_type())])
       self._cost = cost = tf.reduce_sum(loss) / batch_size
       self._final_state = state
+      self._cost_full = tf.reduce_sum(loss) / batch_size;
 
 
     if not is_training:
@@ -352,7 +376,8 @@ class PTBModel(object):
     tvars = tf.trainable_variables()
     grads, _ = tf.clip_by_global_norm(tf.gradients(cost, tvars),
                                       config.max_grad_norm)
-    optimizer = tf.train.GradientDescentOptimizer(self._lr)
+    #optimizer = tf.train.GradientDescentOptimizer(self._lr)
+    optimizer = tf.train.AdagradOptimizer(self._lr)
     self._train_op = optimizer.apply_gradients(
         zip(grads, tvars),
         global_step=tf.contrib.framework.get_or_create_global_step())
@@ -375,6 +400,10 @@ class PTBModel(object):
   @property
   def cost(self):
     return self._cost
+
+  @property
+  def cost_full(self):
+    return self._cost_full
 
   @property
   def final_state(self):
@@ -459,12 +488,14 @@ def run_epoch(session, model, eval_op=None, verbose=False):
   """Runs the model on the given data."""
   start_time = time.time()
   costs = 0.0
+  costs_full=0.0;
   iters = 0
   state = session.run(model.initial_state)
 
   fetches = {
       "cost": model.cost,
       "final_state": model.final_state,
+      "cost_full" : model.cost_full,
   }
   if eval_op is not None:
     fetches["eval_op"] = eval_op
@@ -478,19 +509,25 @@ def run_epoch(session, model, eval_op=None, verbose=False):
     vals = session.run(fetches, feed_dict)
     cost = vals["cost"]
     state = vals["final_state"]
+    cost_full=vals["cost_full"]
 
     costs += cost
+    costs_full += cost_full;
     iters += model.input.num_steps
 
 
     if verbose and step % (model.input.epoch_size // 10) == 10:
       print(costs);
       print(iters);
+#      print("%.3f perplexity: %.3f speed: %.0f wps" %
+#            (step * 1.0 / model.input.epoch_size, np.exp(costs / iters),
+#             iters * model.input.batch_size / (time.time() - start_time)))
       print("%.3f perplexity: %.3f speed: %.0f wps" %
-            (step * 1.0 / model.input.epoch_size, np.exp(costs / iters),
+            (step * 1.0 / model.input.epoch_size, np.exp(costs_full / iters),
              iters * model.input.batch_size / (time.time() - start_time)))
 
-  return np.exp(costs / iters)
+#  return np.exp(costs / iters)
+  return np.exp(costs_full / iters)
 
 
 def get_config():
@@ -542,6 +579,9 @@ def main(_):
                          input_=test_input)
 
     sv = tf.train.Supervisor(logdir=FLAGS.save_path)
+    train_arr=np.array([]);
+    valid_arr=np.array([]);
+
     with sv.managed_session() as session:
       for i in range(config.max_max_epoch):
         lr_decay = config.lr_decay ** max(i + 1 - config.max_epoch, 0.0)
@@ -553,6 +593,17 @@ def main(_):
         print("Epoch: %d Train Perplexity: %.3f" % (i + 1, train_perplexity))
         valid_perplexity = run_epoch(session, mvalid)
         print("Epoch: %d Valid Perplexity: %.3f" % (i + 1, valid_perplexity))
+        train_arr=np.append(train_arr,[train_perplexity]);
+        valid_arr=np.append(valid_arr,[valid_perplexity]);
+        print(train_arr);
+        print(valid_arr);
+
+        #train_opt.write(tf.as_string(train_perplexity));
+        #valid_opt.write(tf.as_string(valid_perplexity));
+        #train_opt.write("\n");
+        #valid_opt.write("\n");
+
+        #np.savetxt('train_opt',tf.as_string(train_perplexity));
 
       test_perplexity = run_epoch(session, mtest)
       print("Test Perplexity: %.3f" % test_perplexity)
