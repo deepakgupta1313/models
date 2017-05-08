@@ -1,0 +1,36 @@
+--------------------------------------------------------------------------------
+Processing file 'ptb_word_lm.py'
+ outputting to 'ptb_word_lm_1.0.py'
+--------------------------------------------------------------------------------
+
+'ptb_word_lm.py' Line 576
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.scalar_summary' to 'tf.summary.scalar'
+
+    Old:       tf.scalar_summary("Validation Loss", mvalid.cost)
+               ~~~~~~~~~~~~~~~~~                                 
+    New:       tf.summary.scalar("Validation Loss", mvalid.cost)
+               ~~~~~~~~~~~~~~~~~                                 
+
+'ptb_word_lm.py' Line 569
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.scalar_summary' to 'tf.summary.scalar'
+
+    Old:       tf.scalar_summary("Training Loss", m.cost)
+               ~~~~~~~~~~~~~~~~~                          
+    New:       tf.summary.scalar("Training Loss", m.cost)
+               ~~~~~~~~~~~~~~~~~                          
+
+'ptb_word_lm.py' Line 570
+--------------------------------------------------------------------------------
+
+Renamed function 'tf.scalar_summary' to 'tf.summary.scalar'
+
+    Old:       tf.scalar_summary("Learning Rate", m.lr)
+               ~~~~~~~~~~~~~~~~~                        
+    New:       tf.summary.scalar("Learning Rate", m.lr)
+               ~~~~~~~~~~~~~~~~~                        
+
+

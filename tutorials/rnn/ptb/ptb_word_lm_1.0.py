@@ -143,7 +143,7 @@ class PTBModel(object):
       for i in range(1,heightt):
         #print("Loop Beginsssss");
         tempp=tf.fill([num_sampless],i);
-        indices2=tf.concat(0,[indices2,tempp]);
+        indices2=tf.concat_v2([indices2,tempp],0);
 
       print("indices2");
       print(indices2);
@@ -175,7 +175,7 @@ class PTBModel(object):
       print(true_logitss_2d);
 
       print("new_logitss");
-      new_logitss=tf.concat(1,[true_logitss_2d,negative_logitss]);
+      new_logitss=tf.concat_v2([true_logitss_2d,negative_logitss],1);
       print(new_logitss);
       
       
@@ -234,18 +234,18 @@ class PTBModel(object):
         (cell_output, state) = cell(inputs[:, time_step, :], state)
         outputs.append(cell_output)
 
-    output = tf.reshape(tf.concat(1,outputs), [-1, size])
+    output = tf.reshape(tf.concat_v2(outputs, 1), [-1, size])
     softmax_w = tf.get_variable(
         "softmax_w", [size, vocab_size], dtype=data_type())
     softmax_w_t = tf.transpose(softmax_w);
     softmax_b = tf.get_variable("softmax_b", [vocab_size], dtype=data_type())
 
-    use_sample_softmax=False;
+    use_sample_softmax=True;
 
     use_top_k_sample_softmax=False;
-    use_random_sample_softmax=True;
+    use_random_sample_softmax=False;
 
-    num_samples = 300;
+    num_samples = 5555;
     
 
     if is_training:
@@ -566,14 +566,14 @@ def main(_):
       train_input = PTBInput(config=config, data=train_data, name="TrainInput")
       with tf.variable_scope("Model", reuse=None, initializer=initializer):
         m = PTBModel(is_training=True, config=config, input_=train_input)
-      tf.scalar_summary("Training Loss", m.cost)
-      tf.scalar_summary("Learning Rate", m.lr)
+      tf.summary.scalar("Training Loss", m.cost)
+      tf.summary.scalar("Learning Rate", m.lr)
 
     with tf.name_scope("Valid"):
       valid_input = PTBInput(config=config, data=valid_data, name="ValidInput")
       with tf.variable_scope("Model", reuse=True, initializer=initializer):
         mvalid = PTBModel(is_training=False, config=config, input_=valid_input)
-      tf.scalar_summary("Validation Loss", mvalid.cost)
+      tf.summary.scalar("Validation Loss", mvalid.cost)
 
     with tf.name_scope("Test"):
       test_input = PTBInput(config=eval_config, data=test_data, name="TestInput")
